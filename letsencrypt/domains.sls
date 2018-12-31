@@ -37,6 +37,20 @@
 
 {% for setname, domainlist in letsencrypt.domainsets.items() %}
 
+{% if letsencrypt.bootstrap_selfsigned %}
+ensure-cacert-path-exists:
+  file.directory:
+    - name: /etc/letsencrypt/live
+    - makedirs: True
+
+create-selfsigned-cert-{{ setname }}-{{ domainlist[0] }}:
+  tls.create_self_signed_cert:
+    - tls_dir: {{ domainlist[0] }}
+    - cacert_path: /etc/letsencrypt/live
+    - CN: {{ domainlist[0] }}
+    - unless: ls /etc/letsencrypt/live/{{domainlist[0] }}
+{% endif %}
+
 # domainlist[0] represents the "CommonName", and the rest
 # represent SubjectAlternativeNames
 create-initial-cert-{{ setname }}-{{ domainlist | join('+') }}:

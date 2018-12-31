@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 letsencrypt:
+  bootstrap_selfsigned: false
   use_package: true
   pkgs:
     - python-certbot-apache
@@ -18,4 +19,3 @@ letsencrypt:
     minute: random
     hour: random
     dayweek: '*'
-
